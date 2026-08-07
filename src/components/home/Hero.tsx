@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+import { Img } from "@/components/ui/Img";
 import { motion, useReducedMotion } from "motion/react";
 import { ButtonLink } from "@/components/ui/Button";
 import { Logo } from "@/components/brand/Logo";
@@ -124,7 +124,7 @@ export function Hero({ locale, dict }: { locale: Locale; dict: Dictionary }) {
 
       {/* Food column ------------------------------------------------- */}
       <div className="relative order-1 h-[52svh] min-h-[19rem] lg:order-2 lg:h-auto lg:min-h-[100svh]">
-        <Image
+        <Img
           src="/food/gallery-manakish.jpg"
           alt=""
           fill

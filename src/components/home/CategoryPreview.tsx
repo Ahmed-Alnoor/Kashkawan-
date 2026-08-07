@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+import { Img } from "@/components/ui/Img";
 import Link from "next/link";
 import { useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
@@ -103,7 +103,7 @@ export function CategoryPreview({ locale, dict }: { locale: Locale; dict: Dictio
                 className="absolute inset-0"
               >
                 {category.image ? (
-                  <Image
+                  <Img
                     src={category.image}
                     alt={`${category.name.en} — ${category.name.ar}`}
                     fill

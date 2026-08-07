@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import Image from "next/image";
+import { Img } from "@/components/ui/Img";
 import { notFound } from "next/navigation";
 import { isLocale, type Locale } from "@/i18n/config";
 import { getDictionary } from "@/i18n";
@@ -86,7 +86,7 @@ export default async function AboutPage({
 
           <Reveal delay={0.1}>
             <div className="relative aspect-[4/5] overflow-hidden rounded-card shadow-warm-lg">
-              <Image
+              <Img
                 src="/food/gallery-pizza.jpg"
                 alt=""
                 fill

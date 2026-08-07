@@ -31,7 +31,7 @@ export const dynamic = "force-dynamic";
 /* right trade-off here: the worst case is one duplicated order that   */
 /* the branch spots on the confirmation call, and it keeps the site    */
 /* dependency-free. Swap in Redis/Upstash if the branch ever runs      */
-/* multiple instances — see docs/EMAIL.md.                             */
+/* multiple instances — see SETUP.md.                                  */
 /* ------------------------------------------------------------------ */
 
 type Seen = { reference: string; at: number };
@@ -162,7 +162,7 @@ export async function POST(request: NextRequest) {
     // Email is not configured yet. The order is still valid and still gets a
     // reference; the confirmation page tells the customer to call it through.
     console.warn(
-      `[orders] ${reference} accepted but email is not configured — set RESEND_API_KEY, ORDER_EMAIL_FROM and ORDER_EMAIL_TO. See docs/EMAIL.md.`,
+      `[orders] ${reference} accepted but email is not configured — set RESEND_API_KEY, ORDER_EMAIL_FROM and ORDER_EMAIL_TO. See SETUP.md.`,
     );
     return NextResponse.json({ reference, emailed: false, emailConfigured: false });
   }

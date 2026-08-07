@@ -19,7 +19,7 @@
  * branch is in (Al Rashidiya 2, Al Burkan Street). They are a starting point
  * for the owner to confirm, NOT a claim that delivery reaches all of them.
  *
- * See docs/CONFIGURE.md.
+ * See SETUP.md.
  */
 
 import type { BilingualText } from "./restaurant";

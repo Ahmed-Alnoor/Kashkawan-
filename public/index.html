@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Kashkawan Cafeteria — كافتيريا قشقوان</title>
+    <meta name="robots" content="noindex" />
+    <link rel="canonical" href="./en/" />
+    <style>
+      html { background: #132b21; color-scheme: light; }
+      body {
+        margin: 0; min-height: 100vh; display: grid; place-content: center;
+        background: #132b21; color: #f5f2ea; text-align: center;
+        font-family: "Segoe UI", system-ui, sans-serif; gap: 1.25rem; padding: 2rem;
+      }
+      a { color: #c69c62; font-weight: 600; }
+    </style>
+    <script>
+      /*
+       * Root redirect for the static (GitHub Pages) build.
+       *
+       * On a Node host, src/proxy.ts handles this before a request ever
+       * reaches a file. GitHub Pages has no such layer, so this page picks the
+       * visitor's language and forwards. Relative paths keep it working from a
+       * project subfolder as well as a custom domain.
+       */
+      (function () {
+        var stored = null;
+        try {
+          stored = localStorage.getItem("kashkawan.locale");
+        } catch (e) {
+          /* storage blocked — fall through to the browser language */
+        }
+        var lang = stored || (navigator.language || "en").toLowerCase();
+        var target = lang.indexOf("ar") === 0 ? "ar" : "en";
+        location.replace("./" + target + "/");
+      })();
+    </script>
+  </head>
+  <body>
+    <p>Kashkawan Cafeteria — كافتيريا قشقوان</p>
+    <!-- Shown only if the script above did not run. -->
+    <p><a href="./en/">English</a> &nbsp;·&nbsp; <a href="./ar/">العربية</a></p>
+  </body>
+</html>

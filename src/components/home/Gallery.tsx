@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+import { Img } from "@/components/ui/Img";
 import { useCallback, useEffect, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { Reveal } from "@/components/ui/Motion";
@@ -94,7 +94,7 @@ export function Gallery({ locale, dict }: { locale: Locale; dict: Dictionary }) 
                   onClick={() => setIndex(i)}
                   className="group relative size-full overflow-hidden rounded-2xl bg-paper-dim shadow-warm-sm transition-shadow duration-300 hover:shadow-warm"
                 >
-                  <Image
+                  <Img
                     src={shot.src}
                     alt={shot.alt[locale]}
                     fill
@@ -166,7 +166,7 @@ export function Gallery({ locale, dict }: { locale: Locale; dict: Dictionary }) 
               className="relative max-h-[82dvh] w-full max-w-4xl"
               onClick={(event) => event.stopPropagation()}
             >
-              <Image
+              <Img
                 src={current.src}
                 alt={current.alt[locale]}
                 width={1200}

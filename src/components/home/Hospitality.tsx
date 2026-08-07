@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { Img } from "@/components/ui/Img";
 import { Reveal, Stagger, StaggerItem } from "@/components/ui/Motion";
 import { IconCheck } from "@/components/ui/Icons";
 import type { Locale } from "@/i18n/config";
@@ -33,7 +33,7 @@ export function Hospitality({ dict }: { locale: Locale; dict: Dictionary }) {
         <Reveal delay={0.08} className="order-1 lg:order-2">
           <div className="relative">
             <div className="relative aspect-[4/5] overflow-hidden rounded-card shadow-warm-lg sm:aspect-[4/3] lg:aspect-[5/6]">
-              <Image
+              <Img
                 src="/food/gallery-manakish.jpg"
                 alt=""
                 fill

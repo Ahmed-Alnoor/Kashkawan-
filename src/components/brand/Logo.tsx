@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { Img } from "@/components/ui/Img";
 import { RESTAURANT } from "@/data/restaurant";
 
 /**
@@ -39,7 +39,7 @@ export function Logo({
 }) {
   const source = SOURCES[variant];
   return (
-    <Image
+    <Img
       src={source.src}
       alt={alt ?? `${RESTAURANT.name.en} — ${RESTAURANT.name.ar}`}
       width={width}

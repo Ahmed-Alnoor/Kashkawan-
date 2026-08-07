@@ -12,6 +12,7 @@ import { MobileOrderBar } from "@/components/layout/MobileOrderBar";
 import { RESTAURANT } from "@/data/restaurant";
 import { siteUrl } from "@/lib/site";
 import { arabicFontFaceCss } from "@/lib/arabic-font";
+import { asset } from "@/lib/deployment";
 
 export const dynamicParams = false;
 
@@ -89,6 +90,11 @@ export default async function LocaleLayout({
   return (
     <html lang={HTML_LANG[locale]} dir={dir} className={`${latin.variable} ${arabicFallback.variable}`}>
       <head>
+        {/* Decorative background assets. CSS url() resolves against the
+            stylesheet, not the document, so these cannot live in globals.css
+            and still respect Next's basePath on a subfolder deployment. */}
+        <style>{`:root{--asset-pattern-arch:url("${asset("/brand/pattern-arch.svg")}");--asset-paper-texture:url("${asset("/texture/paper-wood.jpg")}")}`}</style>
+
         {/* Emitted only when the licensed Madani Arabic files are present.
             The ternary matters: a bare `&&` would put an empty text node in
             <head>, which React reports as a hydration mismatch. */}

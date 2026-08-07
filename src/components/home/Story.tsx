@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { Img } from "@/components/ui/Img";
 import { Reveal, Stagger, StaggerItem } from "@/components/ui/Motion";
 import { ButtonLink } from "@/components/ui/Button";
 import { IconArrow } from "@/components/ui/Icons";
@@ -39,7 +39,7 @@ export function Story({ locale, dict }: { locale: Locale; dict: Dictionary }) {
         <Reveal delay={0.1} className="relative">
           {/* Approved engraved illustration — guidelines p.14 */}
           <div className="relative overflow-hidden rounded-card border border-paper-edge bg-white/70 shadow-warm">
-            <Image
+            <Img
               src="/brand/engraved-spread.jpg"
               alt=""
               width={836}

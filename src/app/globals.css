@@ -12,7 +12,7 @@
 /*                                                                      */
 /* The family stays first in --font-arabic below regardless: an         */
 /* undeclared family is simply skipped, falling through to the brand    */
-/* guidelines' approved fallback (Noto Sans Arabic). See docs/FONTS.md. */
+/* guidelines' approved fallback (Noto Sans Arabic). See SETUP.md. */
 /* ------------------------------------------------------------------ */
 
 @theme {
@@ -70,6 +70,14 @@
   :root {
     color-scheme: light;
     --header-h: 4.25rem;
+
+    /* Decorative asset URLs, set by the layout.
+       CSS url() resolves against the stylesheet, not the document, so it does
+       not pick up Next's basePath. They start as `none` rather than a plain
+       path: a default here would be fetched before the layout's override
+       applied, producing a 404 on every subfolder deployment. */
+    --asset-pattern-arch: none;
+    --asset-paper-texture: none;
   }
 
   @media (min-width: 1024px) {
@@ -197,14 +205,14 @@
      Guidelines p.14: keep line art at 4–8% opacity and outside the primary
      reading path. */
   .pattern-arch {
-    background-image: url("/brand/pattern-arch.svg");
+    background-image: var(--asset-pattern-arch);
     background-size: 200px auto;
     background-repeat: repeat;
     opacity: 0.055;
   }
 
   .pattern-arch-dark {
-    background-image: url("/brand/pattern-arch.svg");
+    background-image: var(--asset-pattern-arch);
     background-size: 200px auto;
     background-repeat: repeat;
     opacity: 0.09;
@@ -212,7 +220,7 @@
   }
 
   .paper-grain {
-    background-image: url("/texture/paper-wood.jpg");
+    background-image: var(--asset-paper-texture);
     background-size: 620px auto;
     opacity: 0.5;
     mix-blend-mode: multiply;

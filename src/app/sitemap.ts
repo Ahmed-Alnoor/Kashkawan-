@@ -1,7 +1,15 @@
 import type { MetadataRoute } from "next";
+
 import { LOCALES } from "@/i18n/config";
 import { localePath, ROUTES } from "@/i18n/routing";
 import { absoluteUrl } from "@/lib/site";
+
+/**
+ * Emitted as a plain file at build time. Required for the static export, and
+ * correct for the server build too — neither of these ever changes per
+ * request.
+ */
+export const dynamic = "force-static";
 
 /** Public pages only — the cart, checkout and confirmation are noindex. */
 const PUBLIC_ROUTES = [

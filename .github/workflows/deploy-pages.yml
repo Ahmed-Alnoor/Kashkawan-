@@ -1,0 +1,74 @@
+name: Deploy to GitHub Pages
+
+# Builds the site as static files and publishes them to GitHub Pages.
+# Every push to this branch redeploys automatically.
+#
+# One-time setup: repository → Settings → Pages → Source: "GitHub Actions".
+#
+# Note: GitHub Pages cannot run a server, so this build routes orders to
+# WhatsApp instead of the order API. For the email-based flow, deploy the
+# normal build to a Node host instead — see SETUP.md.
+
+on:
+  push:
+    branches:
+      - main
+      - claude/premium-restaurant-website-kigqo2
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Let a running deploy finish rather than cancelling it half-published.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Configure Pages
+        id: pages
+        uses: actions/configure-pages@v5
+
+      # A static export cannot contain a route handler or middleware. Removing
+      # them here keeps the source tree intact for the server deployment.
+      - name: Remove server-only code
+        run: rm -rf src/app/api src/proxy.ts
+
+      - name: Build
+        env:
+          STATIC_EXPORT: "1"
+          # Project sites are served from /<repo>; configure-pages works out
+          # the right prefix (empty for a user site or a custom domain).
+          NEXT_PUBLIC_BASE_PATH: ${{ steps.pages.outputs.base_path }}
+          NEXT_PUBLIC_SITE_URL: ${{ steps.pages.outputs.origin }}${{ steps.pages.outputs.base_path }}
+          NEXT_PUBLIC_ORDER_CHANNEL: whatsapp
+        run: npm run build:static
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: out
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

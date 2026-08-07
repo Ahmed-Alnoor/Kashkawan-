@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { Img } from "@/components/ui/Img";
 import type { MenuItem } from "@/data/menu-types";
 import type { Locale } from "@/i18n/config";
 import { IconWheat } from "@/components/ui/Icons";
@@ -34,7 +34,7 @@ export function DishImage({
   if (item.image) {
     return (
       <div className={`${frame} bg-paper-dim`}>
-        <Image
+        <Img
           src={item.image}
           alt={`${item.name.en} — ${item.name.ar}`}
           fill

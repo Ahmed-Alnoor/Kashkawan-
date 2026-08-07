@@ -19,6 +19,7 @@ import { Field, RadioCards, SelectField, TextareaField } from "./Field";
 import { Button, ButtonLink } from "@/components/ui/Button";
 import { IconArrow, IconBag, IconInfo, IconPhone, IconPin } from "@/components/ui/Icons";
 import { storeConfirmation } from "@/lib/confirmation-store";
+import { submitOrder } from "@/lib/submit-order";
 
 type FormState = {
   fullName: string;
@@ -193,22 +194,12 @@ export function CheckoutForm({ locale, dict }: { locale: Locale; dict: Dictionar
     };
 
     try {
-      const response = await fetch("/api/orders", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
+      // Routed to the order API or to WhatsApp depending on how this build was
+      // deployed — see src/lib/submit-order.ts.
+      const result = await submitOrder(payload);
 
-      const result = (await response.json()) as {
-        reference?: string;
-        emailed?: boolean;
-        emailConfigured?: boolean;
-        error?: string;
-        issues?: Array<{ path: string; message: string }>;
-      };
-
-      if (!response.ok || !result.reference) {
-        if (result.issues?.some((issue) => issue.path === "address.areaId")) {
+      if (!result.ok) {
+        if (result.areaRejected) {
           setErrors((current) => ({ ...current, areaId: dict.checkout.areaUnserved }));
         }
         setSubmitError(
@@ -241,8 +232,8 @@ export function CheckoutForm({ locale, dict }: { locale: Locale; dict: Dictionar
       // basket, so a refresh on that page still shows the order.
       storeConfirmation({
         reference: result.reference,
-        emailed: Boolean(result.emailed),
-        emailConfigured: result.emailConfigured !== false,
+        emailed: result.emailed,
+        emailConfigured: result.emailConfigured,
         locale,
         fulfilment,
         customer: payload.customer,

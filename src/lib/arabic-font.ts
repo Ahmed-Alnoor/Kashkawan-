@@ -11,7 +11,7 @@ import path from "node:path";
  * zero failed font requests, and dropping the licensed files in switches the
  * site over on the next build with no code change.
  *
- * See docs/FONTS.md for the exact filenames.
+ * See SETUP.md for the exact filenames.
  */
 
 const WEIGHTS = [

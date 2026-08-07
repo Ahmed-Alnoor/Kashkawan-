@@ -8,7 +8,7 @@ import { Resend } from "resend";
  * gets a reference number, and the confirmation page tells the customer to
  * keep that reference and call the branch. Nothing silently swallows a failure.
  *
- * Required environment variables (see .env.example and docs/EMAIL.md):
+ * Required environment variables (see .env.example and SETUP.md):
  *   RESEND_API_KEY        — Resend API key
  *   ORDER_EMAIL_FROM      — verified sender, e.g. "Kashkawan <orders@kashkawan.ae>"
  *   ORDER_EMAIL_TO        — branch inbox that receives new orders

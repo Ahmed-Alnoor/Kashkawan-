@@ -13,6 +13,8 @@ import { formatMoney, listJoin, telHref } from "@/lib/format";
 import { unitPrice } from "@/lib/pricing";
 import { areaName, paymentLabel } from "@/lib/order-summary";
 import { readConfirmation, type StoredConfirmation } from "@/lib/confirmation-store";
+import { buildWhatsAppMessage } from "@/lib/submit-order";
+import { ORDER_CHANNEL } from "@/lib/deployment";
 import { ButtonLink, ExternalButtonLink } from "@/components/ui/Button";
 import { IconCheck, IconInfo, IconPhone, IconPin, IconWhatsApp } from "@/components/ui/Icons";
 
@@ -107,11 +109,51 @@ export function Confirmation({ locale, dict }: { locale: Locale; dict: Dictionar
               )}
             </p>
 
-            {!order.emailed && (
-              <p className="mt-4 flex gap-2.5 rounded-xl bg-toast/12 px-4 py-3.5 text-sm leading-relaxed text-wheat">
-                <IconInfo className="mt-0.5 size-4 shrink-0" />
-                <span>{dict.confirmation.emailPending}</span>
-              </p>
+            {/* WhatsApp builds: the message was opened in a new tab, which a
+                browser may have blocked. Repeat it here so the order can
+                always be sent — it is not with us until that message goes. */}
+            {ORDER_CHANNEL === "whatsapp" ? (
+              <div className="mt-6 rounded-card border border-heritage/25 bg-heritage/8 p-6">
+                <h2 className="h-card font-bold text-heritage">
+                  {dict.confirmation.whatsappTitle}
+                </h2>
+                <p className="mt-2 text-[0.95rem] leading-relaxed text-ink-muted">
+                  {dict.confirmation.whatsappBody}
+                </p>
+                <ExternalButtonLink
+                  href={whatsappUrl(
+                    buildWhatsAppMessage(
+                      {
+                        idempotencyKey: reference,
+                        locale,
+                        fulfilment: order.fulfilment,
+                        customer: order.customer,
+                        paymentMethod: order.paymentMethod,
+                        website: "",
+                        lines: order.lines,
+                        address: order.address,
+                      },
+                      reference,
+                    ).text,
+                  )}
+                  target="_blank"
+                  size="lg"
+                  className="mt-5 w-full sm:w-auto"
+                >
+                  <IconWhatsApp className="size-5" />
+                  {dict.confirmation.whatsappCta}
+                </ExternalButtonLink>
+                <p className="mt-3 text-xs leading-relaxed text-ink-faint">
+                  {dict.confirmation.whatsappSent}
+                </p>
+              </div>
+            ) : (
+              !order.emailed && (
+                <p className="mt-4 flex gap-2.5 rounded-xl bg-toast/12 px-4 py-3.5 text-sm leading-relaxed text-wheat">
+                  <IconInfo className="mt-0.5 size-4 shrink-0" />
+                  <span>{dict.confirmation.emailPending}</span>
+                </p>
+              )
             )}
 
             <div className="mt-4 flex gap-2.5 rounded-xl bg-heritage/8 px-4 py-3.5">

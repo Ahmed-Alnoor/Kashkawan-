@@ -6,8 +6,8 @@
  *
  * Every value below is taken verbatim from those documents. Do not add
  * opening hours, extra branches, emails or claims that are not printed on
- * the source material — see docs/CONFIGURE.md for the fields the owner
- * still needs to confirm before launch.
+ * the source material — see SETUP.md for the fields the owner still needs to
+ * confirm before launch.
  */
 
 export type BilingualText = { en: string; ar: string };
@@ -57,7 +57,7 @@ export const RESTAURANT = {
    * The menu cover shows TikTok, Instagram, Facebook and Snapchat icons next
    * to "Kashkawan.ae" but prints no per-platform handles. Until the owner
    * confirms each URL these stay null and the footer simply omits them —
-   * see docs/CONFIGURE.md.
+   * see SETUP.md.
    */
   social: {
     instagram: null as string | null,

@@ -10,7 +10,7 @@ import { Outfit, Noto_Sans_Arabic } from "next/font/google";
  * body, mirroring the guidelines' own single-Latin-family approach (p.12:
  * "Use no more than two font families in one customer-facing piece").
  *
- * To switch to the licensed face, see docs/FONTS.md.
+ * To switch to the licensed face, see SETUP.md.
  */
 export const latin = Outfit({
   subsets: ["latin"],

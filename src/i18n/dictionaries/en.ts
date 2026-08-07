@@ -330,6 +330,12 @@ const en = {
     orderAgain: "Order again",
     emailPending:
       "Email confirmation is not switched on yet — please keep your reference number and call us to confirm.",
+    whatsappTitle: "Send your order on WhatsApp",
+    whatsappBody:
+      "Your order is written out and ready. Send it to us on WhatsApp and we will call you to confirm.",
+    whatsappCta: "Open WhatsApp with my order",
+    whatsappSent:
+      "If WhatsApp did not open, use the button below — your order is not with us until that message is sent.",
     notFound: "We could not find that order in this browser.",
     notFoundBody:
       "Order details are kept on your own device only. If you have your reference number, call us and we will look it up.",
