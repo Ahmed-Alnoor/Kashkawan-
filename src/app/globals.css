@@ -1,0 +1,327 @@
+@import "tailwindcss";
+
+/* ------------------------------------------------------------------ */
+/* Arabic display face                                                 */
+/*                                                                     */
+/* "Madani Arabic" is the requested primary Arabic face. It is a        */
+/* licensed font and is NOT bundled with this repository, so its        */
+/* @font-face rules are injected by src/lib/arabic-font.ts only when    */
+/* the woff2 files are actually present in /public/fonts — dropping     */
+/* them in switches the whole site over on the next build, and leaving  */
+/* them out produces no failed requests.                                */
+/*                                                                      */
+/* The family stays first in --font-arabic below regardless: an         */
+/* undeclared family is simply skipped, falling through to the brand    */
+/* guidelines' approved fallback (Noto Sans Arabic). See docs/FONTS.md. */
+/* ------------------------------------------------------------------ */
+
+@theme {
+  /* --- Brand palette (guidelines p.11) --------------------------- */
+  --color-heritage: #2a5d47; /* Heritage Green — primary */
+  --color-heritage-700: #234e3c;
+  --color-heritage-800: #1b3d2f;
+  --color-heritage-900: #132b21; /* deep oven green, for dark sections */
+  --color-heritage-300: #74a48e;
+  --color-heritage-100: #d9e6df;
+
+  --color-wheat: #523b16; /* Wheat Brown — logo linework */
+  --color-wheat-700: #6b4f21;
+  --color-wheat-300: #a98a52;
+
+  --color-paper: #f5f2ea; /* Warm Paper — main background */
+  --color-paper-dim: #ece7db;
+  --color-paper-edge: #ded7c6;
+
+  --color-toast: #c69c62; /* Toast Accent — accent only, never body text */
+  --color-toast-600: #ac8149;
+
+  --color-ink: #252a27; /* Oven Ink — body copy */
+  --color-ink-muted: #5c635e;
+  --color-ink-faint: #8a908b;
+
+  --color-danger: #a3341f;
+  --color-success: #2a5d47;
+
+  /* --- Type ------------------------------------------------------ */
+  --font-sans: var(--font-latin), "Segoe UI", system-ui, sans-serif;
+  --font-arabic:
+    "Madani Arabic", var(--font-arabic-fallback), "Segoe UI", system-ui, sans-serif;
+  --font-display: var(--font-latin), "Segoe UI", system-ui, sans-serif;
+
+  /* --- Motion ---------------------------------------------------- */
+  --ease-oven: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-soft: cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* --- Radii ----------------------------------------------------- */
+  --radius-card: 1.25rem;
+  --radius-pill: 999px;
+
+  /* --- Shadows: warm, never grey ---------------------------------- */
+  --shadow-warm-sm: 0 1px 2px rgba(82, 59, 22, 0.06), 0 2px 8px rgba(82, 59, 22, 0.05);
+  --shadow-warm: 0 2px 6px rgba(82, 59, 22, 0.07), 0 12px 28px -8px rgba(82, 59, 22, 0.14);
+  --shadow-warm-lg: 0 4px 12px rgba(82, 59, 22, 0.08), 0 28px 60px -18px rgba(82, 59, 22, 0.22);
+}
+
+/* ------------------------------------------------------------------ */
+/* Base                                                                */
+/* ------------------------------------------------------------------ */
+
+@layer base {
+  :root {
+    color-scheme: light;
+    --header-h: 4.25rem;
+  }
+
+  @media (min-width: 1024px) {
+    :root {
+      --header-h: 5.25rem;
+    }
+  }
+
+  * {
+    min-width: 0;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    /* Sticky header + sticky category rail must not cover anchor targets. */
+    scroll-padding-top: calc(var(--header-h) + 4.5rem);
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--color-paper);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-synthesis-weight: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: clip;
+  }
+
+  /* Arabic pages get the Arabic stack everywhere, including on numerals
+     (Western Arabic digits are the recommendation — guidelines p.13). */
+  [dir="rtl"] body,
+  [lang="ar"] {
+    font-family: var(--font-arabic);
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    letter-spacing: -0.015em;
+    text-wrap: balance;
+  }
+
+  [dir="rtl"] h1,
+  [dir="rtl"] h2,
+  [dir="rtl"] h3,
+  [dir="rtl"] h4 {
+    font-family: var(--font-arabic);
+    letter-spacing: 0;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  /* Prices and quantities always align — guidelines p.12. */
+  .tabular {
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: "tnum" 1;
+  }
+
+  /* Latin numerals inside Arabic copy keep the Latin face so prices scan. */
+  [dir="rtl"] .tabular {
+    font-family: var(--font-sans);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-heritage);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  ::selection {
+    background: var(--color-heritage);
+    color: var(--color-paper);
+  }
+
+  /* Fluid, brand-scaled headings. */
+  .h-display {
+    font-size: clamp(2.25rem, 1.3rem + 4.2vw, 4.5rem);
+    line-height: 1.04;
+  }
+  [dir="rtl"] .h-display {
+    line-height: 1.28;
+  }
+
+  .h-section {
+    font-size: clamp(1.75rem, 1.2rem + 2.2vw, 2.85rem);
+    line-height: 1.12;
+  }
+  [dir="rtl"] .h-section {
+    line-height: 1.4;
+  }
+
+  .h-card {
+    font-size: clamp(1.05rem, 0.98rem + 0.35vw, 1.3rem);
+    line-height: 1.25;
+  }
+  [dir="rtl"] .h-card {
+    line-height: 1.5;
+  }
+
+  .eyebrow {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+  [dir="rtl"] .eyebrow {
+    letter-spacing: 0;
+    text-transform: none;
+    font-size: 0.85rem;
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/* Components                                                          */
+/* ------------------------------------------------------------------ */
+
+@layer components {
+  /* Quiet arch/wheat texture, drawn from the logo's arch motif.
+     Guidelines p.14: keep line art at 4–8% opacity and outside the primary
+     reading path. */
+  .pattern-arch {
+    background-image: url("/brand/pattern-arch.svg");
+    background-size: 200px auto;
+    background-repeat: repeat;
+    opacity: 0.055;
+  }
+
+  .pattern-arch-dark {
+    background-image: url("/brand/pattern-arch.svg");
+    background-size: 200px auto;
+    background-repeat: repeat;
+    opacity: 0.09;
+    filter: invert(1) brightness(2.2);
+  }
+
+  .paper-grain {
+    background-image: url("/texture/paper-wood.jpg");
+    background-size: 620px auto;
+    opacity: 0.5;
+    mix-blend-mode: multiply;
+  }
+
+  /* Hairline in Toast, used as a section divider. Accent only. */
+  .rule-toast {
+    height: 1px;
+    background: linear-gradient(
+      to right,
+      transparent,
+      color-mix(in oklab, var(--color-toast) 55%, transparent),
+      transparent
+    );
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/* Utilities                                                           */
+/* ------------------------------------------------------------------ */
+
+@layer utilities {
+  .shell {
+    width: 100%;
+    margin-inline: auto;
+    padding-inline: 1.25rem;
+    max-width: 82rem;
+  }
+
+  @media (min-width: 768px) {
+    .shell {
+      padding-inline: 2rem;
+    }
+  }
+
+  @media (min-width: 1280px) {
+    .shell {
+      padding-inline: 2.5rem;
+    }
+  }
+
+  .section-y {
+    padding-block: clamp(3.5rem, 2rem + 6vw, 7.5rem);
+  }
+
+  /* Mirrors an icon that encodes direction (arrows, chevrons) under RTL. */
+  [dir="rtl"] .flip-rtl {
+    transform: scaleX(-1);
+  }
+
+  .no-scrollbar {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Edge fade for the horizontal category rail. */
+  .fade-inline {
+    -webkit-mask-image: linear-gradient(
+      to right,
+      transparent,
+      #000 1.25rem,
+      #000 calc(100% - 1.25rem),
+      transparent
+    );
+    mask-image: linear-gradient(
+      to right,
+      transparent,
+      #000 1.25rem,
+      #000 calc(100% - 1.25rem),
+      transparent
+    );
+  }
+
+  .safe-b {
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/* Reduced motion                                                      */
+/*                                                                     */
+/* Framer Motion handles its own animations via useReducedMotion; this  */
+/* covers CSS transitions, smooth scrolling and decorative keyframes.   */
+/* ------------------------------------------------------------------ */
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Print: the menu should print cleanly for the counter. */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  body {
+    background: #fff;
+  }
+}
