@@ -61,6 +61,7 @@
     font-size:.76rem;letter-spacing:.16em;text-transform:uppercase;color:rgba(245,242,234,.62);
   }
   .service span::after{content:"·";margin-inline-start:.75rem;color:var(--gold-600)}
+  .service.ar{margin-top:-.25rem;text-transform:none;letter-spacing:.02em;font-size:.82rem}
   .service span:last-child::after{content:""}
 
   /* ---------- actions ---------- */
@@ -76,9 +77,20 @@
   .card:hover,.card:focus-visible{background:rgba(198,156,98,.16);border-color:var(--gold);transform:translateY(-2px)}
   .card:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
   .card svg{width:26px;height:26px;stroke:var(--gold);fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+  .ct{display:flex;flex-direction:column;align-items:center;gap:.1rem}
   .card .label{font-weight:600;font-size:1.02rem;letter-spacing:.01em}
-  .card .sub{font-size:.82rem;color:rgba(245,242,234,.66)}
+  .card .label-ar{font-weight:600;font-size:.96rem;color:var(--gold)}
+  .card .sub{font-size:.8rem;color:rgba(245,242,234,.62);margin-top:.15rem}
   .card .sub .ar{display:block}
+
+  .social{display:flex;justify-content:center;gap:.55rem;margin-top:.15rem}
+  .social a{
+    width:42px;height:42px;border-radius:50%;display:grid;place-items:center;
+    border:1px solid rgba(198,156,98,.34);background:rgba(245,242,234,.055);
+    transition:background .2s ease,border-color .2s ease;
+  }
+  .social a:hover,.social a:focus-visible{background:rgba(198,156,98,.18);border-color:var(--gold)}
+  .social svg{width:19px;height:19px;fill:var(--gold);stroke:none}
   .card--wa{background:rgba(37,211,102,.12);border-color:rgba(37,211,102,.4)}
   .card--wa:hover,.card--wa:focus-visible{background:rgba(37,211,102,.2);border-color:#25d366}
   .card--wa svg{stroke:none}
@@ -132,6 +144,7 @@
   }
   .nav a:hover{border-color:var(--gold);color:var(--green)}
   .sheet__body{flex:1 1 auto;min-height:0;overflow-y:auto;padding:0 clamp(.9rem,3vw,1.6rem) 1.6rem;scroll-behavior:smooth}
+  .dl-top{margin:1rem 0 0;text-align:center}
   .sec{padding-top:1.4rem}
   .sec__head{
     display:flex;align-items:baseline;gap:.75rem;border-bottom:2px solid var(--green);
@@ -175,6 +188,12 @@
     background:var(--green);color:var(--paper);
   }
   .btn--wa{background:#128c4a}
+  .btn--dl{
+    background:transparent;color:var(--green);border:1.5px solid var(--green);
+    display:inline-flex;align-items:center;gap:.45rem;
+  }
+  .btn--dl svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+  .btn--dl:hover{background:var(--green);color:var(--paper)}
   .btn:hover{background:var(--green-800)}
   .btn--wa:hover{background:#0e7a40}
   body.locked{overflow:hidden}
@@ -191,18 +210,23 @@
     .service{font-size:.63rem;letter-spacing:.11em;gap:.2rem .5rem}
     .service span::after{margin-inline-start:.5rem}
     .actions{gap:.55rem}
-    .card{padding:.7rem .85rem;gap:.28rem;border-radius:14px}
-    .card svg{width:22px;height:22px}
-    .wa-glyph{width:24px;height:24px}
+    .card{flex-direction:row;align-items:center;text-align:start;padding:.7rem .9rem;gap:.75rem;border-radius:14px}
+    .ct{align-items:flex-start;gap:0}
+    .card svg{width:24px;height:24px;flex:none}
+    .wa-glyph{width:26px;height:26px}
     .card .label{font-size:.95rem}
-    .card .sub{font-size:.76rem;line-height:1.35}
+    .card .label-ar{font-size:.9rem}
+    .card .sub{font-size:.74rem;line-height:1.3;margin-top:.1rem}
+    .social a{width:38px;height:38px}
+    .dl-top{display:none}
     .addr{display:none}
   }
-  @media (max-width:560px) and (max-height:700px){
+  @media (max-width:560px) and (max-height:620px){
     .tagline,.service{display:none}
-    .logo{width:92px}
-    .hero__inner{gap:.6rem}
-    .card{padding:.62rem .85rem}
+    .logo{width:88px}
+    .hero__inner{gap:.55rem}
+    .card{padding:.6rem .9rem}
+    .card .sub{display:none}
   }
 </style>
 </head>
@@ -230,42 +254,63 @@
     <p class="service">
       <span>Pizza</span><span>Pastries</span><span>Manakish</span><span>Arabic Bread</span><span>Fresh Juices</span>
     </p>
+    <p class="service ar">
+      <span>بيتزا</span><span>فطائر</span><span>مناقيش</span><span>خبز عربي طازج</span><span>عصائر طازجة</span>
+    </p>
 
     <div class="actions">
-      <!-- 1. WhatsApp / Call -->
+      <!-- 1. WhatsApp -->
       <a class="card card--wa" href="https://wa.me/971586060158?text=I%20want%20to%20order" target="_blank" rel="noopener">
         <svg viewBox="0 0 24 24" aria-hidden="true" class="wa-glyph"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z" fill="#4ee08a" stroke="none"/></svg>
-        <span class="label">WhatsApp Order</span>
-        <span class="sub">
-          <span class="num">058 60 60 158</span>
-          <span class="ar">اطلب عبر واتساب</span>
+        <span class="ct">
+          <span class="label">WhatsApp Order</span>
+          <span class="label-ar ar">اطلب عبر واتساب</span>
+          <span class="sub"><span class="num">058 60 60 158</span></span>
         </span>
       </a>
 
-      <!-- 2. Location -->
-      <a class="card" href="https://www.google.com/maps/search/?api=1&amp;query=Kashkawan%20Cafeteria%2C%20Ajman%20%E2%80%94%20Al%20Rashidiya%202%20%E2%80%94%20Al%20Burkan%20Street" target="_blank" rel="noopener">
+      <!-- 2. Directions -->
+      <a class="card" href="https://www.google.com/maps/dir/?api=1&amp;destination=Kashkawan%20Cafeteria%2C%20Al%20Burkan%20Street%2C%20Al%20Rashidiya%202%2C%20Ajman%2C%20UAE" target="_blank" rel="noopener">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s7-6.3 7-11a7 7 0 1 0-14 0c0 4.7 7 11 7 11Z"/><circle cx="12" cy="10" r="2.6"/></svg>
-        <span class="label">Location</span>
-        <span class="sub">
-          Ajman · Al Rashidiya 2 · Al Burkan St
-          <span class="ar">عجمان - الراشدية ٢ - شارع البركان</span>
+        <span class="ct">
+          <span class="label">Get Directions</span>
+          <span class="label-ar ar">الموقع والاتجاهات</span>
+          <span class="sub">
+            Ajman · Al Rashidiya 2 · Al Burkan St
+            <span class="ar">عجمان - الراشدية ٢ - شارع البركان</span>
+          </span>
         </span>
       </a>
 
       <!-- 3. Menu -->
       <a class="card" href="#menu" id="menuBtn" role="button">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 3.5h11a3 3 0 0 1 3 3v14H8a3 3 0 0 1-3-3v-14Z"/><path d="M8.5 8h7M8.5 11.5h7M8.5 15h4.5"/></svg>
-        <span class="label">Menu</span>
-        <span class="sub">
-          Full menu &amp; prices
-          <span class="ar">قائمة الطعام</span>
+        <span class="ct">
+          <span class="label">Menu</span>
+          <span class="label-ar ar">قائمة الطعام</span>
+          <span class="sub">
+            Full menu &amp; prices
+            <span class="ar">القائمة الكاملة والأسعار</span>
+          </span>
         </span>
       </a>
     </div>
 
-    <p class="addr">
+    <nav class="social" aria-label="Social media">
+      <a href="https://www.instagram.com/kashkawan.ae" target="_blank" rel="noopener" aria-label="Instagram">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.16c3.2 0 3.58.01 4.85.07 1.17.05 1.8.25 2.23.41.56.22.96.48 1.38.9.42.42.68.82.9 1.38.16.42.36 1.06.41 2.23.06 1.27.07 1.65.07 4.85s-.01 3.58-.07 4.85c-.05 1.17-.25 1.8-.41 2.23-.22.56-.48.96-.9 1.38-.42.42-.82.68-1.38.9-.42.16-1.06.36-2.23.41-1.27.06-1.65.07-4.85.07s-3.58-.01-4.85-.07c-1.17-.05-1.8-.25-2.23-.41-.56-.22-.96-.48-1.38-.9-.42-.42-.68-.82-.9-1.38-.16-.42-.36-1.06-.41-2.23-.06-1.27-.07-1.65-.07-4.85s.01-3.58.07-4.85c.05-1.17.25-1.8.41-2.23.22-.56.48-.96.9-1.38.42-.42.82-.68 1.38-.9.42-.16 1.06-.36 2.23-.41 1.27-.06 1.65-.07 4.85-.07M12 0C8.74 0 8.33.01 7.05.07 5.78.13 4.9.33 4.14.63c-.79.3-1.46.72-2.13 1.38C1.35 2.68.93 3.35.63 4.14.33 4.9.13 5.78.07 7.05.01 8.33 0 8.74 0 12s.01 3.67.07 4.95c.06 1.27.26 2.15.56 2.91.3.79.72 1.46 1.38 2.13.67.66 1.34 1.08 2.13 1.38.76.3 1.64.5 2.91.56C8.33 23.99 8.74 24 12 24s3.67-.01 4.95-.07c1.27-.06 2.15-.26 2.91-.56.79-.3 1.46-.72 2.13-1.38.66-.67 1.08-1.34 1.38-2.13.3-.76.5-1.64.56-2.91.06-1.28.07-1.69.07-4.95s-.01-3.67-.07-4.95c-.06-1.27-.26-2.15-.56-2.91-.3-.79-.72-1.46-1.38-2.13C21.32 1.35 20.65.93 19.86.63 19.1.33 18.22.13 16.95.07 15.67.01 15.26 0 12 0Zm0 5.84a6.16 6.16 0 1 0 0 12.32 6.16 6.16 0 0 0 0-12.32ZM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8Zm7.85-10.41a1.44 1.44 0 1 1-2.88 0 1.44 1.44 0 0 1 2.88 0Z"/></svg>
+      </a>
+      <a href="https://vt.tiktok.com/ZSVHMw1Fx/" target="_blank" rel="noopener" aria-label="TikTok">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07Z"/></svg>
+      </a>
+      <a href="https://www.facebook.com/share/1EXQp2eTrV/" target="_blank" rel="noopener" aria-label="Facebook">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M24 12.07C24 5.4 18.63 0 12 0S0 5.4 0 12.07C0 18.1 4.39 23.09 10.13 24v-8.44H7.08v-3.49h3.05V9.41c0-3.02 1.79-4.69 4.53-4.69 1.31 0 2.68.24 2.68.24v2.97h-1.51c-1.49 0-1.96.93-1.96 1.89v2.25h3.33l-.53 3.49h-2.8V24C19.61 23.09 24 18.1 24 12.07Z"/></svg>
+      </a>
+    </nav>
+
+    <p class="addr"><a href="https://www.google.com/maps/dir/?api=1&amp;destination=Kashkawan%20Cafeteria%2C%20Al%20Burkan%20Street%2C%20Al%20Rashidiya%202%2C%20Ajman%2C%20UAE" target="_blank" rel="noopener" style="text-decoration:none">
       Ajman — Al Rashidiya 2 — Al Burkan Street
-      <span class="ar">عجمان - الراشدية ٢ - شارع البركان</span>
+      <span class="ar">عجمان - الراشدية ٢ - شارع البركان</span></a>
     </p>
   </div>
 </main>
@@ -290,6 +335,12 @@
     </nav>
 
     <div class="sheet__body" id="menuBody" tabindex="-1">
+      <p class="dl-top">
+        <a class="btn btn--dl" href="https://drive.google.com/uc?export=download&amp;id=1IOuFZhRYzAjn0SaHzTjMyOvwEHbeJKnP" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5v11m0 0 4-4m-4 4-4-4"/><path d="M4.5 16.5v1.8a2.2 2.2 0 0 0 2.2 2.2h10.6a2.2 2.2 0 0 0 2.2-2.2v-1.8"/></svg>
+          Download Menu (PDF) · تحميل القائمة
+        </a>
+      </p>
 
       <!-- PIZZA — paired with the pizza photograph -->
       <section class="sec">
@@ -438,6 +489,10 @@
 
     <div class="sheet__foot">
       <a class="btn btn--wa" href="https://wa.me/971586060158?text=I%20want%20to%20order" target="_blank" rel="noopener">Message Us · راسلنا</a>
+      <a class="btn btn--dl" href="https://drive.google.com/uc?export=download&amp;id=1IOuFZhRYzAjn0SaHzTjMyOvwEHbeJKnP" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5v11m0 0 4-4m-4 4-4-4"/><path d="M4.5 16.5v1.8a2.2 2.2 0 0 0 2.2 2.2h10.6a2.2 2.2 0 0 0 2.2-2.2v-1.8"/></svg>
+        Download Menu · تحميل القائمة
+      </a>
     </div>
   </div>
 </div>
