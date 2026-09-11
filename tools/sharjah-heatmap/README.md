@@ -52,11 +52,13 @@ in the source workbooks that the gazetteer could not place. Add those to
 
 | | |
 |---|---|
-| 5,080 | unique businesses after merging both workbooks (28 duplicates collapsed) |
+| 5,077 | unique businesses after merging both workbooks (28 duplicates collapsed) |
 | 75 | automotive and workshop records dropped at build time |
-| 413 | free-zone entities, kept but filtered out of the default view |
-| 4,667 | businesses in the default view |
-| 930 | carry enough geography to plot (831 outside the free zones) |
+| 3 | records traced to Fujairah, Ajman and Dubai, dropped as out of emirate |
+| 419 | free-zone entities, kept but filtered out of the default view |
+| 4,658 | businesses in the default view |
+| 1,036 | plotted (1,141 including the free zones) |
+| 534 of 610 | **P1 core targets plotted — 88%** |
 
 **Automotive and workshops are removed from the dataset**, matched three ways
 because the source workbooks tag them inconsistently: the `Automotive &
@@ -79,8 +81,8 @@ straight to them as a map-trace queue.
 |---|---|---|
 | `exact` | 7 | a real coordinate published in the source workbook |
 | `premises` | 436 | a named building or mall with a known point location |
-| `area` | 487 | the centroid of its district, scattered inside the district footprint |
-| `none` | 4,150 | Sharjah confirmed, no district recorded — left off the map |
+| `area` | 698 | the centroid of its district, scattered inside the district footprint |
+| `none` | 3,936 | Sharjah confirmed, no district recorded — left off the map |
 
 The scatter is deterministic — the same business always lands on the same point —
 and area-uniform, so a district reads as a district rather than a starburst.
@@ -107,3 +109,46 @@ Businesses can be marked *Shortlisted* or *Contacted*. When the page runs as a
 published Artifact with the `db` capability, that list is shared by everyone who
 opens it. Anywhere else it falls back to this browser's local storage, and the
 detail panel says which mode is in effect.
+
+
+## Continuing the trace
+
+The workbooks record no district for most of the list, and nothing else in them
+recovers one — of the businesses left unplaced, only 15 carry a district anywhere
+in their name and none carry a street address. The only way to place the rest is
+to look each one up, one at a time.
+
+That work is resumable:
+
+- `pipeline/trace_queue.csv` — the work list, ordered P1 → P4 and with free
+  zones, workshops and pharmacies already taken out. Longest-website-first
+  within each priority, because a business with a real domain is the one most
+  likely to be findable.
+- `pipeline/traced_locations.csv` — what has been traced so far: name, district,
+  address, and where the district came from. Append rows and re-run the build;
+  a name already in the file is skipped, so the two files together are the
+  resume point.
+- `pipeline/rec.py` — one-liner appender:
+  `python3 rec.py "Business name|District|Address|Source"`.
+
+Rules the existing 211 traces follow, worth keeping:
+
+1. Only record a district you can corroborate — the business's own domain in the
+   result, or a named building you can place. A name match alone is not enough;
+   several Sharjah trade names ("Al Wasit", "Al Jubail") are also district names
+   and mean nothing about location.
+2. A district not already in `gazetteer.py` must be added there with coordinates
+   before it will place — the build reports any it cannot match rather than
+   dropping it.
+3. Businesses that turn out to be outside the emirate get `EXCLUDE` as their
+   district and a reason in the address column; the build drops them and says so.
+
+## Handover checklist
+
+- The viewer needs no build step. `app/index.html` plus its two `.js` files is
+  the whole thing; open it or serve the folder.
+- Street tiles come from CARTO and Esri at run time. If the host blocks
+  third-party images the map falls back to the bundled coastline and says so
+  under the map — nothing silently degrades.
+- To regenerate after editing the traces, re-run the build command above. It
+  prints a full coverage report and flags anything it could not place.
