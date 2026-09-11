@@ -66,6 +66,8 @@ AREAS = {
     "Al Ramaqiya / Wasit":      (25.3495, 55.4290, 1000, "Suburban / residential"),
     "Al Shahba":                (25.3175, 55.3980, 800,  "Residential"),
     "Al Jazzat":                (25.3430, 55.4080, 800,  "Mixed urban"),
+    "Al Fayha":                 (25.3355, 55.4145, 800,  "Suburban / residential"),
+    "Samnan":                   (25.3420, 55.4155, 900,  "Suburban / residential"),
     "Al Riqa Suburb":           (25.3480, 55.4110, 1000, "Suburban / residential"),
     "Al Ghafia":                (25.3400, 55.4180, 900,  "Suburban / residential"),
     "Al Mahatta":               (25.3455, 55.3985, 700,  "Central / commercial"),
