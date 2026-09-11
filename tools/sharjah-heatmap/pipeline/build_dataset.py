@@ -128,6 +128,37 @@ PRIORITY_MAP = {
 }
 
 UNKNOWN_AREA = "Area unknown"
+
+# Vehicle workshops, garages and the auto-parts trade are out of scope for this
+# list. Matched three ways because the source workbooks tag them inconsistently:
+# by broad category, by detailed activity, and by what the business calls itself.
+DROP_CATEGORIES = {"Automotive & Workshops"}
+DROP_DETAIL = re.compile(
+    r"^(auto\s|automotive\b|auto/|auto-)|"
+    r"(auto\s*(spare\s*)?parts|auto\s*repair|auto\s*accessories|auto\s*dealership|"
+    r"automotive\s*services|car\s*(rental|wash|care|service)|tyre|garage)",
+    re.I)
+DROP_NAME = re.compile(r"\b(workshop|garage|auto\s*(garage|repair|maintenance|service|care))\b", re.I)
+
+# A business is "free zone" if it came off the free-zone register or sits in a
+# free-zone district. Kept in the dataset, excluded from the default view.
+FREEZONE_AREAS = {
+    "Hamriyah Free Zone", "Sharjah Airport Free Zone", "Sharjah Free Zone",
+    "Sharjah Media City", "Sharjah Publishing City",
+    "Sharjah Research Technology and Innovation Park",
+}
+
+
+def is_excluded(rec: dict) -> str | None:
+    """Return the reason this record is dropped, or None to keep it."""
+    if rec.get("category") in DROP_CATEGORIES:
+        return "automotive category"
+    if DROP_DETAIL.search(rec.get("detail") or ""):
+        return "automotive activity"
+    if DROP_NAME.search(rec.get("name") or ""):
+        return "workshop / garage"
+    return None
+
 COORD_RE = re.compile(r"([-+]?\d{1,2}\.\d{3,}),\s*([-+]?\d{1,3}\.\d{3,})")
 
 
@@ -385,6 +416,16 @@ def main() -> int:
     records = read_community_workbook(Path(args.community_xlsx))
     records += read_target_workbook(Path(args.target_xlsx))
 
+    dropped = Counter()
+    kept_records = []
+    for rec in records:
+        reason = is_excluded(rec)
+        if reason:
+            dropped[reason] += 1
+        else:
+            kept_records.append(rec)
+    records = kept_records
+
     # De-duplicate on name + area. The premium-community workbook is the
     # richer record, so it wins when the same business appears in both.
     by_key: dict[str, dict] = {}
@@ -425,6 +466,8 @@ def main() -> int:
     for i, rec in enumerate(records):
         geocode(rec)
         rec["sector"] = SECTOR_MAP.get(rec["category"], "Public & Other")
+        if rec["area"] in FREEZONE_AREAS:
+            rec["freezone"] = True
         rec["id"] = i + 1
 
     records.sort(key=lambda r: (r["sector"], r["category"], r["name"]))
@@ -505,6 +548,11 @@ def main() -> int:
     prec = Counter(r["precision"] for r in records)
     print(f"records            {len(records)}")
     print(f"duplicates merged  {duplicates}")
+    print(f"free zone          {sum(1 for r in records if r.get('freezone'))} (kept, filtered out by default)")
+    if dropped:
+        print("excluded:")
+        for k, v in dropped.most_common():
+            print(f"  {v:6d}  {k}")
     print(f"output             {out_path}  ({out_path.stat().st_size/1024:.0f} KB)")
     print("\nprecision:")
     for k, v in prec.most_common():
