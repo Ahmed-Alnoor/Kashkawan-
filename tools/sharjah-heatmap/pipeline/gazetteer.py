@@ -65,6 +65,11 @@ AREAS = {
     "Al Ramaqiya":              (25.3455, 55.4270, 900,  "Suburban / residential"),
     "Al Ramaqiya / Wasit":      (25.3495, 55.4290, 1000, "Suburban / residential"),
     "Al Shahba":                (25.3175, 55.3980, 800,  "Residential"),
+    "Al Jazzat":                (25.3430, 55.4080, 800,  "Mixed urban"),
+    "Al Riqa Suburb":           (25.3480, 55.4110, 1000, "Suburban / residential"),
+    "Al Ghafia":                (25.3400, 55.4180, 900,  "Suburban / residential"),
+    "Al Mahatta":               (25.3455, 55.3985, 700,  "Central / commercial"),
+    "Mughaidir":                (25.3210, 55.4020, 900,  "Suburban / residential"),
 
     # --- Eastern growth corridor ------------------------------------------
     "Muwaileh":                 (25.3050, 55.4470, 1100, "Suburban / mixed"),
@@ -170,6 +175,10 @@ ALIASES = {
     "hamriyah": "Al Hamriyah",
     "al hamriyah free zone": "Hamriyah Free Zone",
     "sharjah healthcare city": "Sharjah Healthcare City",
+    "al riqqa": "Al Riqa Suburb",
+    "al riqa": "Al Riqa Suburb",
+    "mughaidir suburb": "Mughaidir",
+    "al mughaidir": "Mughaidir",
     "shams": "Sharjah Media City",
     "sharjah media city shams": "Sharjah Media City",
     "srtip": "Sharjah Research Technology and Innovation Park",

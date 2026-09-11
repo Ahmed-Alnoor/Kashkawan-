@@ -272,6 +272,9 @@ def apply_traces(records: list[dict], traces: dict[str, dict]) -> tuple[int, lis
             continue
         if not str(rec.get("areaRaw", "")).startswith(UNKNOWN_AREA) and rec.get("areaRaw"):
             continue                      # the workbook already had a district
+        if t["area"].upper() == "EXCLUDE":
+            rec["drop_reason"] = "traced outside Sharjah"
+            continue
         if not resolve_area(t["area"]):
             unmatched_areas.append(t["area"])
             continue
@@ -467,7 +470,7 @@ def main() -> int:
     dropped = Counter()
     kept_records = []
     for rec in records:
-        reason = is_excluded(rec)
+        reason = rec.get("drop_reason") or is_excluded(rec)
         if reason:
             dropped[reason] += 1
         else:
