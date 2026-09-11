@@ -37,3 +37,7 @@ yarn-error.log*
 /blob-report/
 /playwright/.cache/
 .email-preview/
+
+# python
+__pycache__/
+*.pyc
