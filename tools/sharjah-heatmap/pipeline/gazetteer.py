@@ -49,6 +49,7 @@ AREAS = {
     "Al Heerah":                (25.3830, 55.4035, 1100, "Suburban / residential"),
     "Al Rifaah":                (25.3800, 55.3990, 800,  "Suburban / residential"),
     "Al Qadisiya":              (25.3790, 55.3930, 800,  "Suburban / residential"),
+    "Al Ghubaiba":              (25.3465, 55.4020, 800,  "Mixed urban"),
     "Al Khezamia":              (25.3480, 55.4090, 800,  "Mixed urban"),
     "Al Nahda":                 (25.2955, 55.3735, 1000, "Mixed urban"),
     "Al Nahda / Sahara":        (25.2950, 55.3745, 1100, "Mixed urban"),
