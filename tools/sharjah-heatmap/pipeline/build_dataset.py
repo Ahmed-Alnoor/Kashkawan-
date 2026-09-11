@@ -9,6 +9,7 @@ it with a plain <script> tag and stay a static, dependency-free page.
 from __future__ import annotations
 
 import argparse
+import csv
 import hashlib
 import json
 import math
@@ -241,6 +242,48 @@ def resolve_landmark(premises: str) -> tuple | None:
     return None
 
 
+def load_traces(path: Path) -> dict[str, dict]:
+    """Read traced_locations.csv — districts recovered after the workbooks were
+    written. Keyed on the normalised business name so the file stays editable
+    by hand. Columns: name, area, address, source."""
+    if not path.exists():
+        return {}
+    out: dict[str, dict] = {}
+    with path.open(newline="", encoding="utf-8") as fh:
+        for row in csv.DictReader(fh):
+            name = clean(row.get("name"))
+            area = clean(row.get("area"))
+            if not name or not area:
+                continue
+            out[norm_key(name)] = {
+                "area": area,
+                "address": clean(row.get("address")),
+                "source": clean(row.get("source")) or "Traced",
+            }
+    return out
+
+
+def apply_traces(records: list[dict], traces: dict[str, dict]) -> tuple[int, list[str]]:
+    """Fill in districts for records the workbooks left untraced."""
+    applied, unmatched_areas = 0, []
+    for rec in records:
+        t = traces.get(norm_key(rec["name"]))
+        if not t:
+            continue
+        if not str(rec.get("areaRaw", "")).startswith(UNKNOWN_AREA) and rec.get("areaRaw"):
+            continue                      # the workbook already had a district
+        if not resolve_area(t["area"]):
+            unmatched_areas.append(t["area"])
+            continue
+        rec["areaRaw"] = t["area"]
+        if t["address"]:
+            rec["address"] = t["address"]
+        rec["verification"] = t["source"]
+        rec["traced"] = True
+        applied += 1
+    return applied, unmatched_areas
+
+
 def sheet_records(ws, header_row: int) -> list[dict]:
     rows = list(ws.iter_rows(values_only=True))
     if len(rows) <= header_row:
@@ -411,10 +454,15 @@ def main() -> int:
     ap.add_argument("community_xlsx")
     ap.add_argument("target_xlsx")
     ap.add_argument("-o", "--out", default="data.js")
+    ap.add_argument("--traces", default=str(Path(__file__).parent / "traced_locations.csv"),
+                    help="CSV of districts recovered after the workbooks were written")
     args = ap.parse_args()
 
     records = read_community_workbook(Path(args.community_xlsx))
     records += read_target_workbook(Path(args.target_xlsx))
+
+    traces = load_traces(Path(args.traces))
+    traced_n, trace_unmatched = apply_traces(records, traces)
 
     dropped = Counter()
     kept_records = []
@@ -549,6 +597,11 @@ def main() -> int:
     print(f"records            {len(records)}")
     print(f"duplicates merged  {duplicates}")
     print(f"free zone          {sum(1 for r in records if r.get('freezone'))} (kept, filtered out by default)")
+    print(f"traced in          {traced_n} of {len(traces)} rows in traced_locations.csv")
+    if trace_unmatched:
+        print("  TRACE AREAS NOT IN THE GAZETTEER:")
+        for k, v in Counter(trace_unmatched).most_common():
+            print(f"    {v:5d}  {k}")
     if dropped:
         print("excluded:")
         for k, v in dropped.most_common():
